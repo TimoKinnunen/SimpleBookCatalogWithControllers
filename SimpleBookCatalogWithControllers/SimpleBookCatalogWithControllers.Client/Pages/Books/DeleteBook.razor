@@ -1,0 +1,82 @@
+﻿@page "/delete-book/{id:int}"
+@inject IBookService BookService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveAuto
+
+<PageTitle>Delete book</PageTitle>
+
+@if (book is not null)
+{
+    <div class="row justify-content-center">
+        <div class="col-6">
+
+            <h3>Delete book @Id</h3>
+
+            <div class="mb-3">
+                <label>
+                    Id
+                </label>
+                <p>@book.Id</p>
+            </div>
+
+            <div class="mb-3">
+                <label>
+                    Title
+                </label>
+                <p>@book.Title</p>
+            </div>
+
+            <div class="mb-3">
+                <label>
+                    Author
+                </label>
+                <p>@book.Author</p>
+            </div>
+
+            <div class="mb-3">
+                <label>
+                    Date published
+                </label>
+                <p>@book.PublicationDate</p>
+            </div>
+
+            <div class="mb-3">
+                <label>
+                    Category
+                </label>
+                <p>@book.Category</p>
+            </div>
+
+            <div class="mb-3">
+                <button @onclick="Delete" class="btn btn-danger mb-3">
+                    Delete
+                </button>
+
+                <a href="/books" class="btn btn-secondary mb-3">
+                    Back to books
+                </a>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Book? book { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        book = await BookService.GetByIdAsync(Id);
+    }
+
+    private async Task Delete()
+    {
+        if (book is not null)
+        {
+            await BookService.DeleteByIdAsync(Id);
+            NavigationManager.NavigateTo("/books");
+        }
+    }
+}

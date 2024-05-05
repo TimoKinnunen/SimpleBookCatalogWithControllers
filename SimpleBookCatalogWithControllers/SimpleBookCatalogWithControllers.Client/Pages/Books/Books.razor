@@ -1,0 +1,68 @@
+﻿@page "/books"
+@inject IBookService BookService
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>Books</PageTitle>
+
+<div class="row justify-content-center">
+    <div class="col-md-12">
+        <a href="add-book" class="btn btn-primary float-end" mb-3>
+            Add book
+        </a>
+        <h3>Books</h3>
+        <div>
+            @if (books is null)
+            {
+                <div class="book-item">
+                    Loading books. Please wait.
+                </div>
+            }
+            else if (books.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Date published</th>
+                            <th>Category</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in books)
+                        {
+                            <tr>
+                                <td>@book.Id</td>
+                                <td>@book.Title</td>
+                                <td>@book.Author</td>
+                                <td>@book.PublicationDate.ToLocalTime().ToShortDateString()</td>
+                                <td>@book.Category</td>
+                                <td><a href="@($"/edit-book/{book.Id}")" class="btn btn-warning">Edit</a></td>
+                                <td><a href="@($"/delete-book/{book.Id}")" class="btn btn-danger">Delete</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="book-item">
+                    No books found.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<Book>? books { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await BookService.GetAllAsync();
+    }
+}

@@ -1,0 +1,74 @@
+﻿@page "/add-book"
+@inject IBookService BookService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveAuto
+
+<PageTitle>Add book</PageTitle>
+
+<div class="row justify-content-center">
+    <div class="col-6">
+        <EditForm Enhance="true" FormName="AddBookForm" Model="book" OnValidSubmit="@Add">
+
+            <h3>Add book</h3>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">
+                    Title
+                </label>
+                <InputText id="title" class="form-control" @bind-Value="book.Title" />
+            </div>
+
+            <div class="mb-3">
+                <label for="author" class="form-label">
+                    Author
+                </label>
+                <InputText id="author" class="form-control" @bind-Value="book.Author" />
+            </div>
+            <div class="mb-3">
+                <label for="publication-date" class="form-label">
+                    Date published
+                </label>
+                <InputDate id="publication-date" @bind-Value="book.PublicationDate" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">
+                    Category
+                </label>
+                <InputSelect id="category" @bind-Value="book.Category" class="form-control">
+                    <option value="0">
+                        Select a category
+                    </option>
+                    @foreach (var category in Enum.GetValues(typeof(Category)))
+                    {
+                        <option value="@category">
+                            @category.ToString()
+                        </option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success mb-3">
+                    Save
+                </button>
+
+                <a href="/books" class="btn btn-secondary mb-3">
+                    Back to books
+                </a>
+            </div>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    public Book book { get; set; } = new() { PublicationDate = DateTime.UtcNow };
+
+    private async Task Add()
+    {
+        // Add book to the database
+        await BookService.AddAsync(book);
+        NavigationManager.NavigateTo("/books");
+    }
+}
