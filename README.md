@@ -37,6 +37,6 @@ EditBook.razor @rendermode InteractiveServer.
 
 DeleteBook.razor @rendermode InteractiveServer.
 
-BookService is needed on Server side.
+BookService is still needed on Server side.
 
 With helpful regards Timo Kinnunen
