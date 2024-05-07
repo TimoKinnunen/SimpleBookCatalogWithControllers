@@ -38,7 +38,7 @@ namespace SimpleBookCatalogWithControllers.ServerServices
 
         public async Task<Book?> GetByIdAsync(int id)
         {
-            var book = await context.Books.FirstOrDefaultAsync(b => b.Id == id);
+            var book = await context.Books.FindAsync(id);
             return book;
         }
 

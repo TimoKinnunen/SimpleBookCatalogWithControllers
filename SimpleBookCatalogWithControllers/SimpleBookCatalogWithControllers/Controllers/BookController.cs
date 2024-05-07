@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SimpleBookCatalogWithControllers.Data;
 using SimpleBookCatalogWithControllers.Shared.Entities;
-using SimpleBookCatalogWithControllers.Shared.Interfaces;
 
 namespace SimpleBookCatalogWithControllers.Controllers
 {
@@ -8,45 +9,53 @@ namespace SimpleBookCatalogWithControllers.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly IBookService bookService;
+        private readonly DataContext context;
 
-        public BookController(IBookService bookService)
+        public BookController(DataContext context)
         {
-            this.bookService = bookService;
+            this.context = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Book>?>> GetAllAsync()
         {
-            var books = await bookService.GetAllAsync();
+            var books = await context.Books.ToListAsync();
             return books;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Book?>> GetByIdAsync(int id)
         {
-            var book = await bookService.GetByIdAsync(id);
+            var book = await context.Books.FindAsync(id);
             return book;
         }
 
         [HttpPost]
         public async Task<ActionResult> AddAsync(Book book)
         {
-            await bookService.AddAsync(book);
+            context.Books.Add(book);
+            await context.SaveChangesAsync();
             return Ok();
+
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteByIdAsync(int id)
         {
-            await bookService.DeleteByIdAsync(id);
+            var book = await context.Books.FindAsync(id);
+            if (book is not null)
+            {
+                context.Books.Remove(book);
+                await context.SaveChangesAsync();
+            }
             return Ok();
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateAsync(Book book)
         {
-            await bookService.UpdateAsync(book);
+            context.Books.Update(book);
+            await context.SaveChangesAsync();
             return Ok();
         }
     }
