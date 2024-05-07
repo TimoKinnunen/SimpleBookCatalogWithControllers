@@ -21,7 +21,7 @@ BookService.cs is different on server side and client side.
 
 Register services on server and client side.
 
-Install Design, Sqlite, Tools on server side.
+Install Design, Sqlite, Tools on server side. Add-migration and update-database works.
 
 Helpful videos of Entity Framework Core in .NET 8 on YouTube:
 https://www.youtube.com/watch?v=w8imy7LT9zY&t=3190s by Patrick God. Thank you.
