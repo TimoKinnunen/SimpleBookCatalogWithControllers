@@ -25,9 +25,13 @@ https://www.youtube.com/watch?v=jw-udNnMgaE&t=10s by CodeGanesh. Thank you.
 
 Late update 20240507:
 BookController uses "DataContext context" instead of "BookService".
+
 Books.razor @attribute [StreamRendering].
+
 AddBook.razor @rendermode InteractiveServer.
+
 EditBook.razor @rendermode InteractiveServer.
+
 DeleteBook.razor @rendermode InteractiveServer.
 
 BookService is needed on Server side.
