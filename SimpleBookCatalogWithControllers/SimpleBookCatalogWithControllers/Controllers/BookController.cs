@@ -14,20 +14,20 @@ namespace SimpleBookCatalogWithControllers.Controllers
         public BookController(DataContext context)
         {
             this.context = context;
-        }
+       }
 
         [HttpGet]
         public async Task<ActionResult<List<Book>?>> GetAllAsync()
         {
             var books = await context.Books.ToListAsync();
-            return books;
+            return Ok(books);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Book?>> GetByIdAsync(int id)
         {
             var book = await context.Books.FindAsync(id);
-            return book;
+            return Ok(book);
         }
 
         [HttpPost]
